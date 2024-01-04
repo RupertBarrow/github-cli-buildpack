@@ -35,21 +35,26 @@ install_github_cli() {
   chmod a+x  "$BUILD_DIR/vendor/github/cli/bin/gh"
 
   rm -rf gh
+
+  gh version
 }
 
 install_github_cli_extensions() {
   log "Installing extensions  ..."
-  gh version
+  cd $BUILD_DIR/vendor/github
 
-  # "gh extension install" requires authentication (well, actually, only requires GH_TOKEN to be set)
-  # see https://github.com/cli/cli/issues/8475
-  export GH_TOKEN=foobar
+  # Using "gh extension install" requires a Github token, which we do not have during installation.
+  # So we use this workaround suggested here : https://github.com/cli/cli/issues/8475
 
   # Annotations
-  gh extension install swfz/gh-annotations
+  git clone https://github.com/swfz/gh-annotations
+  GH_TOKEN=foobar gh extension install ./gh-annotations
 
   # Dispatch events to start Github Actions
-  gh extension install mdb/gh-dispatch
+  git clone https://github.com/mdb/gh-dispatch
+  GH_TOKEN=foobar gh extension install ./gh-dispatch
+
+  GH_TOKEN=foobar gh extensions list
 }
 
 setup_dirs() {
