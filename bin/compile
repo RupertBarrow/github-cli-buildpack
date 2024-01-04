@@ -41,6 +41,10 @@ install_github_cli_extensions() {
   log "Installing extensions  ..."
   gh version
 
+  # "gh extension install" requires authentication (well, actually, only requires GH_TOKEN to be set)
+  # see https://github.com/cli/cli/issues/8475
+  export GH_TOKEN=foobar
+
   # Annotations
   gh extension install swfz/gh-annotations
 
