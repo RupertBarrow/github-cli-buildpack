@@ -32,7 +32,7 @@ install_github_cli() {
   rm -rf "$BUILD_DIR/vendor/github"
   mkdir -p "$BUILD_DIR/vendor/github/cli/bin"
   cp -r gh/bin "$BUILD_DIR/vendor/github/cli"
-  chmod -R 755  "$BUILD_DIR/vendor/github/cli/bin/gh"
+  chmod a+x  "$BUILD_DIR/vendor/github/cli/bin/gh"
 
   rm -rf gh
 }
@@ -41,6 +41,7 @@ install_github_cli_extensions() {
   log "Installing extensions  ..."
   echo $PATH
   which gh
+  gh version
 
   # Annotations
   gh extension install swfz/gh-annotations
