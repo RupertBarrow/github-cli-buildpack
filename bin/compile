@@ -39,11 +39,6 @@ install_github_cli() {
 
 install_github_cli_extensions() {
   log "Installing extensions  ..."
-  set -x
-  arch
-  uname -a
-  echo $PATH
-  ls -al $BUILD_DIR/vendor/github/cli/bin
   gh version
 
   # Annotations
