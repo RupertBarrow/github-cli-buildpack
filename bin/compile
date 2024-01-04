@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+START_TIME=$SECONDS
+
+# set -x
+set -o errexit    # always exit on error
+set -o pipefail   # don't ignore exit codes when piping output
+unset GIT_DIR     # Avoid GIT_DIR leak from previous build steps
+
+### Configure directories
+
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+
+# set defaults for optional config vars
+: ${GITHUB_BUILDPACK_DEBUG:="false"}
+
+source $BP_DIR/lib/common.sh
+source $BP_DIR/lib/stdlib.sh
+
+### Setup functions
+
+install_github_cli() {
+  log "Downloading Github CLI  ..."
+  mkdir gh && curl --silent --location "https://github.com/cli/cli/releases/download/v2.40.1/gh_2.40.1_linux_arm64.tar.gz" | gunzip | tar xJ -C gh --strip-components 1
+
+  log "Copying Github CLI binary ..."
+
+  rm -rf "$BUILD_DIR/vendor/github"
+  mkdir -p "$BUILD_DIR/vendor/github/cli/bin"
+  cp -r gh/bin "$BUILD_DIR/vendor/github/cli"
+  chmod -R 755  "$BUILD_DIR/vendor/github/cli/bin/gh"
+
+  rm -rf gh
+}
+
+install_github_cli_extensions() {
+  log "Installi,ng extensions  ..."
+
+  # Annotations
+  $BUILD_DIR/vendor/github/cli/bin/gh extension install swfz/gh-annotations
+
+  # Dispatch events to start Github Actions
+  $BUILD_DIR/vendor/github/cli/bin/gh extension install mdb/gh-dispatch
+}
+
+setup_dirs() {
+  export PATH="$BUILD_DIR/vendor/github/cli/bin:$PATH"
+}
+
+header 'Welcome to github-cli-buildpack!'
+log "Exporting environment directories ..."
+export_env "$ENV_DIR"
+
+log "Setting up paths ..."
+
+debug "BUILD_DIR: $BUILD_DIR"
+debug "CACHE_DIR: $CACHE_DIR"
+debug "ENV_DIR: $ENV_DIR"
+debug "BP_DIR: $BP_DIR"
+
+setup_dirs
+log "Starting CLI installation ..."
+install_github_cli
+install_github_cli_extensions
+
+# Create .profile.d folder
+mkdir -p $BUILD_DIR/.profile.d
+
+if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
+  log "Creating path.sh ..."
+  echo "echo \"Updating PATH to include Github CLI ...\"
+export PATH=\$PATH:/app/vendor/github/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
+fi
+if [ -f $BUILD_DIR/.profile.d/path.sh ]; then
+  log "Updating path.sh ..."
+  echo "echo \"Updating PATH to include Github CLI ...\"
+export PATH=\$PATH:/app/vendor/github/cli/bin/" >> $BUILD_DIR/.profile.d/path.sh
+fi
+log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+
+header "DONE! Completed in $(($SECONDS - $START_TIME))s"
+exit 0
