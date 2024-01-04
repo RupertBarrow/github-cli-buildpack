@@ -54,6 +54,7 @@ install_github_cli_extensions() {
   git clone https://github.com/mdb/gh-dispatch
   cd gh-dispatch && GH_TOKEN=foobar gh extension install . && cd ..
 
+  echo "gh extensions list"
   GH_TOKEN=foobar gh extensions list
 }
 
@@ -81,17 +82,18 @@ install_github_cli_extensions
 # Create .profile.d folder
 mkdir -p $BUILD_DIR/.profile.d
 
-if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
-  log "Creating path.sh ..."
-  echo "echo \"Updating PATH to include Github CLI ...\"
-export PATH=\$PATH:/app/vendor/github/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
-fi
 if [ -f $BUILD_DIR/.profile.d/path.sh ]; then
   log "Updating path.sh ..."
   echo "echo \"Updating PATH to include Github CLI ...\"
 export PATH=\$PATH:/app/vendor/github/cli/bin/" >> $BUILD_DIR/.profile.d/path.sh
+  log "Updated $BUILD_DIR/.profile.d/path.sh to add CLI path"
 fi
-log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
+  log "Creating path.sh ..."
+  echo "echo \"Updating PATH to include Github CLI ...\"
+export PATH=\$PATH:/app/vendor/github/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
+  log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+fi
 
 header "DONE! Completed in $(($SECONDS - $START_TIME))s"
 exit 0
