@@ -48,11 +48,11 @@ install_github_cli_extensions() {
 
   # Annotations
   git clone https://github.com/swfz/gh-annotations
-  GH_TOKEN=foobar gh extension install ./gh-annotations
+  cd gh-annotations && GH_TOKEN=foobar gh extension install . && cd ..
 
   # Dispatch events to start Github Actions
   git clone https://github.com/mdb/gh-dispatch
-  GH_TOKEN=foobar gh extension install ./gh-dispatch
+  cd gh-dispatch && GH_TOKEN=foobar gh extension install . && cd ..
 
   GH_TOKEN=foobar gh extensions list
 }
