@@ -11,7 +11,7 @@ The Github CLI comes with the following plugins :
 
 ## Usage
 
-To use `gh`, you simply need to export the appropriate paths:
+The path is already exported in the Heroku .profil.d :
 
 ```
 export PATH="$BUILD_DIR/vendor/github/cli/bin:$PATH"
