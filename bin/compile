@@ -39,12 +39,14 @@ install_github_cli() {
 
 install_github_cli_extensions() {
   log "Installing extensions  ..."
+  echo $PATH
+  which gh
 
   # Annotations
-  $BUILD_DIR/vendor/github/cli/bin/gh extension install swfz/gh-annotations
+  gh extension install swfz/gh-annotations
 
   # Dispatch events to start Github Actions
-  $BUILD_DIR/vendor/github/cli/bin/gh extension install mdb/gh-dispatch
+  gh extension install mdb/gh-dispatch
 }
 
 setup_dirs() {
@@ -65,6 +67,7 @@ debug "BP_DIR: $BP_DIR"
 setup_dirs
 log "Starting CLI installation ..."
 install_github_cli
+setup_dirs
 install_github_cli_extensions
 
 # Create .profile.d folder
