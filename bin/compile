@@ -25,7 +25,7 @@ source $BP_DIR/lib/stdlib.sh
 
 install_github_cli() {
   log "Downloading Github CLI  ..."
-  mkdir gh && curl --silent --location "https://github.com/cli/cli/releases/download/v2.40.1/gh_2.40.1_linux_arm64.tar.gz" | gunzip | tar xJ -C gh --strip-components 1
+  mkdir gh && curl --silent --location "https://github.com/cli/cli/releases/download/v2.40.1/gh_2.40.1_linux_arm64.tar.gz" | gunzip | tar -x -C gh --strip-components 1
 
   log "Copying Github CLI binary ..."
 
