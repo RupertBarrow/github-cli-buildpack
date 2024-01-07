@@ -60,6 +60,8 @@ install_github_cli_extensions() {
 
 setup_dirs() {
   export PATH="$BUILD_DIR/vendor/github/cli/bin:$PATH"
+
+  echo $PATH
 }
 
 header 'Welcome to github-cli-buildpack!'
@@ -77,7 +79,7 @@ setup_dirs
 log "Starting CLI installation ..."
 install_github_cli
 setup_dirs
-install_github_cli_extensions
+#install_github_cli_extensions
 
 # Create .profile.d folder
 mkdir -p $BUILD_DIR/.profile.d
