@@ -86,7 +86,7 @@ mkdir -p $BUILD_DIR/.profile.d
 # if no .profile.d/path.sh, create one
 if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
   log "Creating path.sh ..."
-  echo "echo \"Updating PATH to include Salesforce CLI ...\"
+  echo "echo \"Updating PATH to include Github CLI ...\"
 export PATH=\$PATH:/app/vendor/github/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
 
   log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
