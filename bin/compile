@@ -89,7 +89,7 @@ if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
   echo "echo \"Updating PATH to include Github CLI ...\"
 export PATH=\$PATH:/app/vendor/github/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
 
-  log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+  log "Generated $BUILD_DIR/.profile.d/path.sh to add Github CLI path"
 fi
 
 header "DONE! Completed in $(($SECONDS - $START_TIME))s"
