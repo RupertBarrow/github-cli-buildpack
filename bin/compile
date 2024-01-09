@@ -78,7 +78,6 @@ debug "BP_DIR: $BP_DIR"
 setup_dirs
 log "Starting CLI installation ..."
 install_github_cli
-setup_dirs
 #install_github_cli_extensions
 
 # Create .profile.d folder
@@ -87,14 +86,18 @@ mkdir -p $BUILD_DIR/.profile.d
 if [ -f $BUILD_DIR/.profile.d/path.sh ]; then
   log "Updating path.sh ..."
   echo "echo \"Updating PATH to include Github CLI ...\"
-export PATH=\$PATH:/app/vendor/github/cli/bin/" >> $BUILD_DIR/.profile.d/path.sh
-  log "Updated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+  echo "export PATH=$PATH" >> $BUILD_DIR/.profile.d/path.sh
+  echo "... Updated $BUILD_DIR/.profile.d/path.sh to add CLI path :"
+  log "... Updated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+  cat $BUILD_DIR/.profile.d/path.sh
 fi
 if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
   log "Creating path.sh ..."
   echo "echo \"Updating PATH to include Github CLI ...\"
-export PATH=\$PATH:/app/vendor/github/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
-  log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+  echo "export PATH=$PATH" > $BUILD_DIR/.profile.d/path.sh
+  echo "... Generated $BUILD_DIR/.profile.d/path.sh to add CLI path :"
+  log "... Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+  cat $BUILD_DIR/.profile.d/path.sh
 fi
 
 header "DONE! Completed in $(($SECONDS - $START_TIME))s"
