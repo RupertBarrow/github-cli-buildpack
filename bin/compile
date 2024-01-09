@@ -83,21 +83,13 @@ install_github_cli
 # Create .profile.d folder
 mkdir -p $BUILD_DIR/.profile.d
 
-if [ -f $BUILD_DIR/.profile.d/path.sh ]; then
-  log "Updating path.sh ..."
-  echo "echo \"Updating PATH to include Github CLI ...\"
-  echo "export PATH=$PATH" >> $BUILD_DIR/.profile.d/path.sh
-  echo "... Updated $BUILD_DIR/.profile.d/path.sh to add CLI path :"
-  log "... Updated $BUILD_DIR/.profile.d/path.sh to add CLI path"
-  cat $BUILD_DIR/.profile.d/path.sh
-fi
+# if no .profile.d/path.sh, create one
 if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
   log "Creating path.sh ..."
-  echo "echo \"Updating PATH to include Github CLI ...\"
-  echo "export PATH=$PATH" > $BUILD_DIR/.profile.d/path.sh
-  echo "... Generated $BUILD_DIR/.profile.d/path.sh to add CLI path :"
-  log "... Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
-  cat $BUILD_DIR/.profile.d/path.sh
+  echo "echo \"Updating PATH to include Salesforce CLI ...\"
+export PATH=\$PATH:/app/vendor/github/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
+
+  log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
 fi
 
 header "DONE! Completed in $(($SECONDS - $START_TIME))s"
